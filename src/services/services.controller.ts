@@ -1,28 +1,28 @@
 import { Controller, Query, Param } from '@nestjs/common';
 import { Get } from '@nestjs/common';
 import { ServicesService } from './services.service';
-import { ServicesQuery } from './dto/services.query.dto';
-import { ServicesResponseDto } from './dto/services.dto';
-import { VersionsResponseDto } from './dto/versions.dto';
+import { ServicesQueryDTO } from './dto/services.query.dto';
+import { ServicesResponseDTO } from './dto/services.dto';
+import { VersionsResponseDTO } from './dto/versions.dto';
 
 @Controller('services')
 export class ServicesController {
   constructor(private readonly servicesService: ServicesService) {}
 
   @Get()
-  getAllServices(
-    @Query() query: ServicesQuery,
-  ): Promise<ServicesResponseDto[]> {
-    return this.servicesService.getAll(query);
+  async getAllServices(
+    @Query() serviceQueryDTO: ServicesQueryDTO,
+  ): Promise<ServicesResponseDTO[]> {
+    return this.servicesService.getAll(serviceQueryDTO);
   }
 
   @Get(':id')
-  getServiceById(@Param('id') id: string): Promise<ServicesResponseDto> {
+  async getServiceById(@Param('id') id: string): Promise<ServicesResponseDTO> {
     return this.servicesService.getById(id);
   }
 
   @Get(':id/versions')
-  getServiceVersions(@Param('id') id: string): Promise<VersionsResponseDto[]> {
+  async getServiceVersions(@Param('id') id: string): Promise<VersionsResponseDTO[]> {
     return this.servicesService.getVersions(id);
   }
 }

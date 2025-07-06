@@ -9,15 +9,17 @@ import {
   IsIn,
 } from 'class-validator';
 
-export class ServicesQuery {
+export class ServicesQueryDTO {
+  @IsOptional()
   @IsInt()
   @Min(1)
-  page: number = 1;
+  page?: number = 1;
 
+  @IsOptional()
   @IsInt()
   @Max(100)
   @Min(1)
-  limit: number = 5;
+  limit?: number = 5;
 
   @IsOptional()
   @IsString()

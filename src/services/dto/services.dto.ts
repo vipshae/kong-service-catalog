@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { DefaultResponseDto } from './default.dto';
+import { DefaultResponseDTO } from './default.dto';
 import {
   IsDate,
   IsNotEmpty,
@@ -8,10 +8,10 @@ import {
   IsArray,
 } from 'class-validator';
 
-export class ServicesResponseDto extends DefaultResponseDto {
+export class ServicesResponseDTO extends DefaultResponseDTO {
   @IsString()
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsString()
   @IsNotEmpty()

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { DefaultResponseDto } from './default.dto';
+import { DefaultResponseDTO } from './default.dto';
 import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class VersionsResponseDto extends DefaultResponseDto {
+export class VersionsResponseDTO extends DefaultResponseDTO {
   @IsString()
   @IsNotEmpty()
-  id: number;
+  id: string;
 
   @IsString()
   @IsNotEmpty()

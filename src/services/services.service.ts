@@ -1,39 +1,65 @@
 import { Injectable } from '@nestjs/common';
+import { ServicesResponseDTO } from './dto/services.dto';
+import { VersionsResponseDTO } from './dto/versions.dto';
+import { ServicesQueryDTO } from './dto/services.query.dto';
 import { Service } from './interfaces/service.interface';
 import { ServiceVersion } from './interfaces/serviceVersion.interface';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class ServicesService {
+  private readonly sericeVersions: ServiceVersion[] = [
+    {
+      id: 'v1',
+      version: '1.0.0',
+      description: 'Initial version of User Service',
+      serviceId: '1',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
   private readonly services: Service[] = [
     {
       id: '1',
       name: 'User Service',
       description: 'Service for managing users',
-      versions: [
-        {
-          id: 'v1',
-          version: '1.0.0',
-          description: 'Initial version of User Service',
-          serviceId: '1',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
+      versions: this.sericeVersions,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   ];
 
-  getAll(query: any = {}): Service[] {
-    return this.services;
+  private mapServiceToDTO(service: Service): ServicesResponseDTO {
+    return {
+      id: service.id,
+      name: service.name,
+      description: service.description,
+      versions: service.versions.map((version) => version.version),
+      created_at: service.createdAt,
+      updated_at: service.updatedAt,
+    };
   }
 
-  getById(id: string): Service | undefined {
-    return this.services.find((service) => service.id === id);
+  async getAll(query: ServicesQueryDTO = {}): Promise<ServicesResponseDTO[]> {
+    const { limit = 5, page = 1 } = query;
+    const offset = (page - 1) * limit;
+    const paginatedServices = this.services.slice(offset, offset + limit);
+    return paginatedServices.map((service) => this.mapServiceToDTO(service));
   }
 
-  getVersions(id: string): ServiceVersion[] {
-    const service = this.getById(id);
-    return service ? service.versions : [];
+  async getById(serviceId: string): Promise<ServicesResponseDTO> {
+    const foundService = this.services.find((service) => service.id === serviceId);
+    if (!foundService) {
+      throw new NotFoundException(`Service with id ${serviceId} not found`);
+    }
+    return this.mapServiceToDTO(foundService);
+  }
+
+  async getVersions(serviceId: string): Promise<VersionsResponseDTO[]> {
+    const foundService = this.services.find((service) => service.id === serviceId);
+    if (!foundService) {
+      throw new NotFoundException(`Service with id ${serviceId} not found`);
+    }
+    return foundService ? foundService.versions : [];
   }
 }
