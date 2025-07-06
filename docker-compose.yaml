@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: kong_service_catalog_postgres
+    environment:
+      POSTGRES_USER: konguser
+      POSTGRES_PASSWORD: kongpassword
+      POSTGRES_DB: kongdb
+    ports:
+      - "5433:5432"
