@@ -11,18 +11,18 @@ import { NotFoundException } from '@nestjs/common';
 export class ServicesService {
   constructor(private readonly servicesRepository: ServicesRepository) {}
 
-  private mapServiceToDTO(service: ServiceEntity): ServicesResponseDTO {
+  private static mapServiceToDTO(service: ServiceEntity): ServicesResponseDTO {
     return {
       id: String(service.id),
       name: service.name,
       description: service.description,
       versions: service.versions.map((version) => version.version),
-      createdAt: service.created_at,
-      updatedAt: service.updated_at,
+      created_at: service.created_at,
+      updated_at: service.updated_at,
     };
   }
 
-  private mapServiceVersionToDTO(
+  private static mapServiceVersionToDTO(
     serviceVersion: ServiceVersionEntity,
   ): VersionsResponseDTO {
     return {
@@ -30,15 +30,27 @@ export class ServicesService {
       description: serviceVersion.description,
       version: serviceVersion.version,
       serviceId: String(serviceVersion.service.id),
-      createdAt: serviceVersion.created_at,
-      updatedAt: serviceVersion.updated_at,
+      created_at: serviceVersion.created_at,
+      updated_at: serviceVersion.updated_at,
     };
   }
 
   async getAll(query: ServicesQueryDTO = {}): Promise<ServicesResponseDTO[]> {
+    const dbQuery = {
+      page: query.page,
+      limit: query.limit,
+      sortBy: query.sortBy,
+      sortOrder: query.sortOrder,
+      filters: {
+        name: query.name,
+        description: query.description,
+      },
+    };
     const queriedServices =
-      await this.servicesRepository.findAllServices(query);
-    return queriedServices.map((service) => this.mapServiceToDTO(service));
+      await this.servicesRepository.findAllServices(dbQuery);
+    return queriedServices.map((service) =>
+      ServicesService.mapServiceToDTO(service),
+    );
   }
 
   async getById(serviceId: number): Promise<ServicesResponseDTO> {
@@ -47,12 +59,14 @@ export class ServicesService {
     if (!foundService) {
       throw new NotFoundException(`Service with id ${serviceId} not found`);
     }
-    return this.mapServiceToDTO(foundService);
+    return ServicesService.mapServiceToDTO(foundService);
   }
 
   async getVersions(serviceId: number): Promise<VersionsResponseDTO[]> {
     const foundVersions =
       await this.servicesRepository.findAllVersionsForService(serviceId);
-    return foundVersions.map((version) => this.mapServiceVersionToDTO(version));
+    return foundVersions.map((version) =>
+      ServicesService.mapServiceVersionToDTO(version),
+    );
   }
 }

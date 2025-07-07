@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Service as ServiceEntity } from './entity/service.entity';
 import { ServiceVersion as ServiceVersionEntity } from './entity/service-version.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Repository, In } from 'typeorm';
 
 @Injectable()
 export class ServicesRepository {
@@ -14,23 +14,51 @@ export class ServicesRepository {
       this.dataSource.getRepository(ServiceVersionEntity);
   }
 
-  async findAllServices(queryOptions: {
+  private static buildWhere(filters: { name?: string; description?: string }) {
+    const where: Record<string, any> = {};
+    if (filters.name) {
+      where.name = ILike(`%${filters.name}%`);
+    }
+    if (filters.description) {
+      where.description = ILike(`%${filters.description}%`);
+    }
+    return where;
+  }
+
+  async findAllServices(options: {
     page?: number;
-    pageSize?: number;
-    filterBy?: string;
-    sortBy?: string;
+    limit?: number;
+    sortBy?: 'name' | 'created_at' | 'updated_at';
     sortOrder?: 'ASC' | 'DESC';
+    filters?: {
+      name?: string;
+      description?: string;
+    };
   }): Promise<ServiceEntity[]> {
     const {
-      limit = 5,
       page = 1,
-      filterBy = {},
+      limit = 5,
       sortBy = 'name',
       sortOrder = 'ASC',
-    } = queryOptions;
-    return this.serviceRepository.find({
-      relations: ['versions'],
+      filters = {},
+    } = options;
+    const whereClause = ServicesRepository.buildWhere(filters);
+    const [services, total] = await this.serviceRepository.findAndCount({
+      where: whereClause,
+      order: { [sortBy]: sortOrder },
+      skip: (page - 1) * limit,
+      take: limit,
     });
+    if (total === 0) return [];
+    const serviceIds = services.map((s) => s.id);
+    const servicesWithVersions = await this.serviceRepository.find({
+      where: { id: In(serviceIds) },
+      relations: ['versions'],
+      order: { [sortBy]: sortOrder },
+    });
+    return serviceIds.map(
+      (id) => servicesWithVersions.find((s) => s.id === id)!,
+    );
   }
 
   async findServiceById(id: number): Promise<ServiceEntity | null> {
@@ -46,6 +74,7 @@ export class ServicesRepository {
     return this.serviceVersionRepository.find({
       where: { service: { id: serviceId } },
       order: { version: 'ASC' },
+      relations: ['service'],
     });
   }
 }
