@@ -66,6 +66,7 @@ describe('AppController (e2e)', () => {
 
       expect(Array.isArray(response.body)).toBe(true);
       for (const service of response.body) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         expect(service.name.toLowerCase()).toContain('admin');
       }
     });

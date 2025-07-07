@@ -39,6 +39,8 @@ export class ServicesQueryDTO {
 
   @IsOptional()
   @IsIn(['ASC', 'DESC', 'asc', 'desc'])
-  @Transform(({ value }) => value?.toUpperCase())
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.toUpperCase() : value,
+  )
   sortOrder?: 'ASC' | 'DESC' = 'ASC';
 }
