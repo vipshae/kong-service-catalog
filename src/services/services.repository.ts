@@ -97,7 +97,13 @@ export class ServicesRepository {
   // If no versions are found, it returns an empty array.
   async findAllVersionsForService(
     serviceId: number,
-  ): Promise<ServiceVersionEntity[]> {
+  ): Promise<ServiceVersionEntity[] | null> {
+    const service = await this.serviceRepository.findOne({
+      where: { id: serviceId },
+    });
+    if (!service) {
+      return null;
+    }
     return this.serviceVersionRepository.find({
       where: { service: { id: serviceId } },
       order: { version: 'ASC' },

@@ -67,6 +67,9 @@ export class ServicesService {
   async getVersions(serviceId: number): Promise<VersionsResponseDTO[]> {
     const foundVersions =
       await this.servicesRepository.findAllVersionsForService(serviceId);
+    if (!foundVersions) {
+      throw new NotFoundException(`Service with id ${serviceId} not found`);
+    }
     return foundVersions.map((version) =>
       ServicesService.mapServiceVersionToDTO(version),
     );
