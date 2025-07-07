@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Service } from './service.entity';
 
@@ -22,6 +23,7 @@ export class ServiceVersion {
   @ManyToOne(() => Service, (service) => service.versions, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'serviceId' })
   service: Service;
 
   @CreateDateColumn({ type: 'timestamptz', nullable: true })
