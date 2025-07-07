@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServicesModule } from './services/services.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     }),
     ServicesModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
