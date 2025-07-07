@@ -1,4 +1,4 @@
-## Description
+## Kong Service Catalog API
 
 Kong Service Catalog API for implementing services dashboard widget. 
 
@@ -11,8 +11,28 @@ This project uses nest.js to create an express webserver which serves the follow
 
 ## Project setup
 
+To install packages and initialize the db. This will use docker-compose to spin up a postgres container
+
 ```bash
 $ npm install
+```
+
+## DB migrations
+
+### Create migration
+
+To create new migration ex: newMigration
+
+```bash
+npm run typeorm -- migration:create src/migrations/newMigration
+```
+
+### Run migrations
+
+To add db schema and seed the tables
+
+```bash
+npm run migration:run
 ```
 
 ## Compile and run the project locally
