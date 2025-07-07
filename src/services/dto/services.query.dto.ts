@@ -38,7 +38,7 @@ export class ServicesQueryDTO {
   sortBy?: 'name' | 'created_at' | 'updated_at' = 'name';
 
   @IsOptional()
+  @IsIn(['ASC', 'DESC', 'asc', 'desc'])
   @Transform(({ value }) => value?.toUpperCase())
-  @IsIn(['ASC', 'DESC'])
   sortOrder?: 'ASC' | 'DESC' = 'ASC';
 }

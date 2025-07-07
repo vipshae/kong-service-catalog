@@ -11,7 +11,7 @@ This project uses nest.js to create an express webserver which serves the follow
 
 ## Project setup
 
-To install packages and initialize the db. This will use docker-compose to spin up a postgres container
+To install packages and initialize the db and run migrations to seed the tables. This will also use docker-compose to spin up a postgres container.
 
 ```bash
 $ npm install

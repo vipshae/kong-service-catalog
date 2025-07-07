@@ -11,6 +11,7 @@ import { NotFoundException } from '@nestjs/common';
 export class ServicesService {
   constructor(private readonly servicesRepository: ServicesRepository) {}
 
+  // Helper method to map ServiceEntity to ServicesResponseDTO
   private static mapServiceToDTO(service: ServiceEntity): ServicesResponseDTO {
     return {
       id: String(service.id),
@@ -22,6 +23,7 @@ export class ServicesService {
     };
   }
 
+  // Helper method to map ServiceVersionEntity to VersionsResponseDTO
   private static mapServiceVersionToDTO(
     serviceVersion: ServiceVersionEntity,
   ): VersionsResponseDTO {
