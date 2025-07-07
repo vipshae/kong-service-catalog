@@ -20,9 +20,6 @@ export class Service {
   @Column()
   description: string;
 
-  @Column()
-  org_id: string;
-
   @OneToMany(() => ServiceVersion, (version) => version.service, {
     cascade: true,
   })
