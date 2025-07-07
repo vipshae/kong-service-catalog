@@ -33,6 +33,9 @@ import { AppController } from './app.controller';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    if (process.env.NODE_ENV !== 'test') {
+      // Apply LoggerMiddleware only in non-test environments
+      consumer.apply(LoggerMiddleware).forRoutes('*');
+    }
   }
 }
