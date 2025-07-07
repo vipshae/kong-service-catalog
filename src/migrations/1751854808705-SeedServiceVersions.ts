@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class SeedServiceVersions1751854808705 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      INSERT INTO service_versions (version, description, service)
+      INSERT INTO service_versions (version, description, "serviceId")
       VALUES
         ('v1.0.0', 'Initial version of Service', 1),
         ('v1.1.0', 'Added 2FA support', 1),

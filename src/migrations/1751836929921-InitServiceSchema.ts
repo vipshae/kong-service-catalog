@@ -5,13 +5,12 @@ export class InitServiceSchema1751836929921 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "service_versions" ("id" SERIAL NOT NULL, "version" character varying NOT NULL, "description" character varying NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), "service" integer, CONSTRAINT "PK_2cdf123a2486f00862495e81101" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "service_versions" ("id" SERIAL NOT NULL, "version" character varying NOT NULL, "description" character varying NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), "serviceId" integer, CONSTRAINT "PK_2cdf123a2486f00862495e81101" PRIMARY KEY ("id"))`,
     );
+    await queryRunner.query(`
+      CREATE TABLE "services" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), CONSTRAINT "UQ_019d74f7abcdcb5a0113010cb03" UNIQUE ("name"), CONSTRAINT "PK_ba2d347a3168a296416c6c5ccb2" PRIMARY KEY ("id"))`);
     await queryRunner.query(
-      `CREATE TABLE "services" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying NOT NULL, "created_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE DEFAULT now(), CONSTRAINT "PK_ba2d347a3168a296416c6c5ccb2" PRIMARY KEY ("id"), CONSTRAINT "UQ_services_name" UNIQUE ("name"))`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "service_versions" ADD CONSTRAINT "FK_b94e0f41ebbfefd949ac1f0f60e" FOREIGN KEY ("service") REFERENCES "services"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
+      `ALTER TABLE "service_versions" ADD CONSTRAINT "FK_b94e0f41ebbfefd949ac1f0f60e" FOREIGN KEY ("serviceId") REFERENCES "services"("id") ON DELETE CASCADE ON UPDATE NO ACTION`,
     );
   }
 

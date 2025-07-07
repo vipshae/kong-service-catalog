@@ -9,7 +9,7 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "postinstall": "docker-compose --env-file=.env.local up -d --force-recreate",
+    "postinstall": "docker-compose --env-file=.env.local up -d --force-recreate && npm run migration:run",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:generate": "npm run typeorm -- migration:generate src/migrations/InitServiceSchema -d typeorm.config.ts",
     "migration:run": "npm run typeorm -- migration:run -d typeorm.config.ts",
