@@ -1,5 +1,5 @@
 import { Controller, Query, Param } from '@nestjs/common';
-import { Get } from '@nestjs/common';
+import { Get, ParseIntPipe } from '@nestjs/common';
 import { ServicesService } from './services.service';
 import { ServicesQueryDTO } from './dto/services.query.dto';
 import { ServicesResponseDTO } from './dto/services.dto';
@@ -17,12 +17,16 @@ export class ServicesController {
   }
 
   @Get(':id')
-  async getServiceById(@Param('id') id: string): Promise<ServicesResponseDTO> {
+  async getServiceById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ServicesResponseDTO> {
     return this.servicesService.getById(id);
   }
 
   @Get(':id/versions')
-  async getServiceVersions(@Param('id') id: string): Promise<VersionsResponseDTO[]> {
+  async getServiceVersions(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<VersionsResponseDTO[]> {
     return this.servicesService.getVersions(id);
   }
 }

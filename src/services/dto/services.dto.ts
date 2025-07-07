@@ -27,9 +27,9 @@ export class ServicesResponseDTO extends DefaultResponseDTO {
 
   @IsOptional()
   @IsDate()
-  created_at?: Date;
+  createdAt?: Date;
 
   @IsOptional()
   @IsDate()
-  updated_at?: Date;
+  updatedAt?: Date;
 }

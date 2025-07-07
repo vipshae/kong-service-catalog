@@ -27,9 +27,9 @@ export class ServicesQueryDTO {
   filterBy?: string;
 
   @IsOptional()
-  @IsString()
+  @IsIn(['name', 'id', 'createdAt', 'updatedAt'])
   @IsNotEmpty()
-  sortBy?: string = 'id';
+  sortBy?: string = 'name';
 
   @IsOptional()
   @IsIn(['asc', 'desc'])
