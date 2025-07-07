@@ -5,7 +5,7 @@ Kong Service Catalog API for implementing services dashboard widget.
 This project uses nest.js to create an express webserver which serves the following CRUD functionalities and their respective APIs:
 
 - Returning a list of services: `GET /api/services`
-- support filtering, sorting, pagination: `GET /api/services?page=1&limit=5&filter_by=name&sort_by=asc`
+- support filtering, sorting, pagination: `GET /api/services?page=1&limit=5&name=kong&sort_by=asc`
 - Fetching a particular service: `GET /api/services/:id`
 - including a method for retrieving its versions: `GET /api/services/:id/versions`
 
@@ -57,9 +57,6 @@ $ npm run test
 # e2e tests
 $ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
 
 ## Formatting and Linting
 

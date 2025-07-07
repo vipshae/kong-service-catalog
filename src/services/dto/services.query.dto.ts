@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
   IsOptional,
   IsInt,
@@ -9,29 +8,37 @@ import {
   IsIn,
 } from 'class-validator';
 
+import { Type, Transform } from 'class-transformer';
+
 export class ServicesQueryDTO {
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   page?: number = 1;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
-  @Max(100)
   @Min(1)
+  @Max(100)
   limit?: number = 5;
 
   @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  filterBy?: string;
+  name?: string;
 
   @IsOptional()
-  @IsIn(['name', 'id', 'createdAt', 'updatedAt'])
-  @IsNotEmpty()
-  sortBy?: string = 'name';
+  @IsString()
+  description?: string;
 
   @IsOptional()
-  @IsIn(['asc', 'desc'])
-  sortOrder?: 'asc' | 'desc' = 'asc';
+  @IsIn(['name', 'created_at', 'updated_at'])
+  @IsNotEmpty()
+  sortBy?: 'name' | 'created_at' | 'updated_at' = 'name';
+
+  @IsOptional()
+  @Transform(({ value }) => value?.toUpperCase())
+  @IsIn(['ASC', 'DESC'])
+  sortOrder?: 'ASC' | 'DESC' = 'ASC';
 }
