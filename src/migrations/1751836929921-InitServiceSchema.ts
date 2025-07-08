@@ -15,9 +15,7 @@ export class InitServiceSchema1751836929921 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE "service_versions" DROP CONSTRAINT "FK_b94e0f41ebbfefd949ac1f0f60e"`,
-    );
+    await queryRunner.query(`ALTER TABLE "service_versions" DROP CONSTRAINT "FK_b94e0f41ebbfefd949ac1f0f60e"`);
     await queryRunner.query(`DROP TABLE "services"`);
     await queryRunner.query(`DROP TABLE "service_versions"`);
   }

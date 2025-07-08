@@ -1,10 +1,4 @@
-import {
-  IsDate,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsArray,
-} from 'class-validator';
+import { IsDate, IsNotEmpty, IsOptional, IsString, IsArray } from 'class-validator';
 
 export class ServicesResponseDTO {
   @IsString()

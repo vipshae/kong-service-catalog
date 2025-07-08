@@ -1,12 +1,4 @@
-import {
-  IsOptional,
-  IsInt,
-  Min,
-  Max,
-  IsString,
-  IsNotEmpty,
-  IsIn,
-} from 'class-validator';
+import { IsOptional, IsInt, Min, Max, IsString, IsNotEmpty, IsIn } from 'class-validator';
 
 import { Type, Transform } from 'class-transformer';
 
@@ -39,8 +31,6 @@ export class ServicesQueryDTO {
 
   @IsOptional()
   @IsIn(['ASC', 'DESC', 'asc', 'desc'])
-  @Transform(({ value }: { value: unknown }) =>
-    typeof value === 'string' ? value.toUpperCase() : value,
-  )
+  @Transform(({ value }: { value: unknown }) => (typeof value === 'string' ? value.toUpperCase() : value))
   sortOrder?: 'ASC' | 'DESC' = 'ASC';
 }

@@ -29,40 +29,28 @@ describe('AppController (e2e)', () => {
 
   describe('/GET /services', () => {
     it('should throw validation error for invalid query parameters', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/services?sortBy=invalid&sortOrder=invalid')
-        .expect(400);
+      const response = await request(app.getHttpServer()).get('/services?sortBy=invalid&sortOrder=invalid').expect(400);
 
-      expect(response.body.message).toContain(
-        'sortBy must be one of the following values: name, created_at, updated_at',
-      );
-      expect(response.body.message).toContain(
-        'sortOrder must be one of the following values: ASC, DESC, asc, desc',
-      );
+      expect(response.body.message).toContain('sortBy must be one of the following values: name, created_at, updated_at');
+      expect(response.body.message).toContain('sortOrder must be one of the following values: ASC, DESC, asc, desc');
     });
 
     it('should return all services without query parameters', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/services')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/services').expect(200);
 
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeLessThanOrEqual(5); // Default limit is 5
     });
 
     it('should return paginated list of services', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/services?page=1&limit=2')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/services?page=1&limit=2').expect(200);
 
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeLessThanOrEqual(2);
     });
 
     it('should filter by name', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/services?name=admin')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/services?name=admin').expect(200);
 
       expect(Array.isArray(response.body)).toBe(true);
       for (const service of response.body) {
@@ -74,9 +62,7 @@ describe('AppController (e2e)', () => {
 
   describe('/GET /services/:id', () => {
     it('should return a service by ID', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/services/1')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/services/1').expect(200);
 
       expect(response.body).toHaveProperty('id');
       expect(response.body.id).toBe('1');
@@ -91,9 +77,7 @@ describe('AppController (e2e)', () => {
 
   describe('/GET /services/:id/versions', () => {
     it('should return versions of a service by ID', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/services/1/versions')
-        .expect(200);
+      const response = await request(app.getHttpServer()).get('/services/1/versions').expect(200);
 
       expect(Array.isArray(response.body)).toBe(true);
       for (const version of response.body) {
@@ -104,9 +88,7 @@ describe('AppController (e2e)', () => {
     });
 
     it('should return 404 for non-existent service ID', async () => {
-      await request(app.getHttpServer())
-        .get('/services/9999/versions')
-        .expect(404);
+      await request(app.getHttpServer()).get('/services/9999/versions').expect(404);
     });
   });
 });
