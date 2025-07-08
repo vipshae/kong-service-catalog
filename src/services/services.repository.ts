@@ -10,8 +10,7 @@ export class ServicesRepository {
 
   constructor(private dataSource: DataSource) {
     this.serviceRepository = this.dataSource.getRepository(ServiceEntity);
-    this.serviceVersionRepository =
-      this.dataSource.getRepository(ServiceVersionEntity);
+    this.serviceVersionRepository = this.dataSource.getRepository(ServiceVersionEntity);
   }
 
   // Helper method to build the WHERE clause for filtering services
@@ -48,13 +47,7 @@ export class ServicesRepository {
       description?: string;
     };
   }): Promise<ServiceEntity[]> {
-    const {
-      page = 1,
-      limit = 5,
-      sortBy = 'name',
-      sortOrder = 'ASC',
-      filters = {},
-    } = options;
+    const { page = 1, limit = 5, sortBy = 'name', sortOrder = 'ASC', filters = {} } = options;
     const whereClause = ServicesRepository.buildWhere(filters);
 
     // find services matching the where clause with pagination and sorting.
@@ -74,9 +67,7 @@ export class ServicesRepository {
       order: { [sortBy]: sortOrder },
     });
     // return the services with their versions in the same order as the paginated serviceIds.
-    return serviceIds.map(
-      (id) => servicesWithVersions.find((s) => s.id === id)!,
-    );
+    return serviceIds.map((id) => servicesWithVersions.find((s) => s.id === id)!);
   }
 
   // Finds a service by its ID, including its versions.
@@ -95,9 +86,7 @@ export class ServicesRepository {
   // - `serviceId`: The ID of the service for which to find versions.
   // Returns an array of ServiceVersionEntity objects, ordered by version in ascending order.
   // If no versions are found, it returns an empty array.
-  async findAllVersionsForService(
-    serviceId: number,
-  ): Promise<ServiceVersionEntity[] | null> {
+  async findAllVersionsForService(serviceId: number): Promise<ServiceVersionEntity[] | null> {
     const service = await this.serviceRepository.findOne({
       where: { id: serviceId },
     });

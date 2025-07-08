@@ -7,10 +7,11 @@ async function bootstrap() {
   const logger = new Logger('MainBootstrap');
   app.enableCors();
   app.useGlobalPipes(
+    // for all incoming requests
     new ValidationPipe({
-      transform: true,
-      whitelist: true,
-      forbidNonWhitelisted: true,
+      transform: true, // automatically transform payloads to DTO instances
+      whitelist: true, // strip properties that do not have any decorators in the DTO
+      forbidNonWhitelisted: true, // throw an error if non-whitelisted properties are present
     }),
   );
   await app.listen(process.env.PORT ?? 3000);

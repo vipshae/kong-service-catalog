@@ -24,9 +24,7 @@ export class ServicesService {
   }
 
   // Helper method to map ServiceVersionEntity to VersionsResponseDTO
-  private static mapServiceVersionToDTO(
-    serviceVersion: ServiceVersionEntity,
-  ): VersionsResponseDTO {
+  private static mapServiceVersionToDTO(serviceVersion: ServiceVersionEntity): VersionsResponseDTO {
     return {
       id: String(serviceVersion.id),
       description: serviceVersion.description,
@@ -48,16 +46,12 @@ export class ServicesService {
         description: query.description,
       },
     };
-    const queriedServices =
-      await this.servicesRepository.findAllServices(dbQuery);
-    return queriedServices.map((service) =>
-      ServicesService.mapServiceToDTO(service),
-    );
+    const queriedServices = await this.servicesRepository.findAllServices(dbQuery);
+    return queriedServices.map((service) => ServicesService.mapServiceToDTO(service));
   }
 
   async getById(serviceId: number): Promise<ServicesResponseDTO> {
-    const foundService =
-      await this.servicesRepository.findServiceById(serviceId);
+    const foundService = await this.servicesRepository.findServiceById(serviceId);
     if (!foundService) {
       throw new NotFoundException(`Service with id ${serviceId} not found`);
     }
@@ -65,13 +59,10 @@ export class ServicesService {
   }
 
   async getVersions(serviceId: number): Promise<VersionsResponseDTO[]> {
-    const foundVersions =
-      await this.servicesRepository.findAllVersionsForService(serviceId);
+    const foundVersions = await this.servicesRepository.findAllVersionsForService(serviceId);
     if (!foundVersions) {
       throw new NotFoundException(`Service with id ${serviceId} not found`);
     }
-    return foundVersions.map((version) =>
-      ServicesService.mapServiceVersionToDTO(version),
-    );
+    return foundVersions.map((version) => ServicesService.mapServiceVersionToDTO(version));
   }
 }
