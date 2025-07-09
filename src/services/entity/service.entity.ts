@@ -14,7 +14,7 @@ export class Service {
   description: string;
 
   @OneToMany(() => ServiceVersion, (version) => version.service, {
-    cascade: true,
+    cascade: true, // Automatically persist related versions when saving the service
   })
   versions: ServiceVersion[];
 

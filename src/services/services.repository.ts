@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Service as ServiceEntity } from './entity/service.entity';
 import { ServiceVersion as ServiceVersionEntity } from './entity/service-version.entity';
-import { DataSource, ILike, Repository, In } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class ServicesRepository {
@@ -49,25 +49,14 @@ export class ServicesRepository {
   }): Promise<ServiceEntity[]> {
     const { page = 1, limit = 5, sortBy = 'name', sortOrder = 'ASC', filters = {} } = options;
     const whereClause = ServicesRepository.buildWhere(filters);
-
-    // find services matching the where clause with pagination and sorting.
-    const [services, total] = await this.serviceRepository.findAndCount({
-      where: whereClause,
-      order: { [sortBy]: sortOrder },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
-    // if matching services are not found, return an empty array.
-    if (total === 0) return [];
-    const serviceIds = services.map((s) => s.id);
-    // Fetch the versions for each service and include them in the result.
-    const servicesWithVersions = await this.serviceRepository.find({
-      where: { id: In(serviceIds) },
-      relations: ['versions'],
-      order: { [sortBy]: sortOrder },
-    });
-    // return the services with their versions in the same order as the paginated serviceIds.
-    return serviceIds.map((id) => servicesWithVersions.find((s) => s.id === id)!);
+    return await this.serviceRepository
+      .createQueryBuilder('service')
+      .leftJoinAndSelect('service.versions', 'version')
+      .where(whereClause)
+      .orderBy(`service.${sortBy}`, sortOrder)
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getMany();
   }
 
   // Finds a service by its ID, including its versions.

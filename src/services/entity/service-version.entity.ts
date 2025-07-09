@@ -13,7 +13,7 @@ export class ServiceVersion {
   description: string;
 
   @ManyToOne(() => Service, (service) => service.versions, {
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE', // If a service is deleted, its versions will also be deleted
   })
   @JoinColumn({ name: 'serviceId' })
   service: Service;
