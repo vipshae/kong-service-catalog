@@ -99,3 +99,21 @@ This separation of concerns ensures:
 - Clear boundaries between business logic and data access.
 
 The project structure is motivated by the [Domain-Driven Design (DDD)](https://en.wikipedia.org/wiki/Domain-driven_design) principles and leverages NestJS’s dependency injection for loose coupling between components.
+
+## Assumptions
+
+- Filtering only by name, description, sortBy and orderBy
+- pagination defaults to limit 5 entries 
+- returning empty results array is ok
+- migrations done statically
+- user is already authenticated and authorized to run apis
+- read env from dotenv
+
+## Improvements
+
+- UX improvements with cursor based pagination
+- Explicit exception handling
+- status code when empty service or versions array
+- Authorization and Authentication
+- Debug logging
+- dockerize the server
